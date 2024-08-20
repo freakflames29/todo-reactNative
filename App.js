@@ -9,15 +9,20 @@ import {
   ScrollView,
   FlatList,
   Modal,
+  ActionSheetIOS,
+  Image,
 } from "react-native";
 import { useState } from "react";
 import TempComp from "./TempComp";
 // import styles from "./style";
 import GoalItem from "./components/GoalItem";
+import LinearGradient from "react-native-linear-gradient";
+
 export default function App() {
   const [enteredText, setEnteredText] = useState("");
   const [goals, setGoals] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [courseDelete, setCourseDelete] = useState(false);
 
   function enteredTextHandler(theText) {
     setEnteredText(theText);
@@ -36,17 +41,27 @@ export default function App() {
       {
         text: "Cancel",
         onPress: () => {
-          console.log("Cancel pressed");
+          setCourseDelete(false);
         },
         style: "cancel",
       },
-      { text: "Yeah Bro!!", onPress: () => console.log("OK Pressed") },
+      {
+        text: "Yeah man!!",
+        onPress: () => {
+          console.log(goals + " => DELETED");
+          setGoals((prevGoals) => {
+            return prevGoals.filter((goal, ind) => ind !== index);
+          });
+        },
+      },
     ]);
 
-    console.log(goals + " => DELETED");
-    setGoals((prevGoals) => {
-      return prevGoals.filter((goal, ind) => ind !== index);
-    });
+    // if (courseDelete == true) {
+    //   console.log(goals + " => DELETED");
+    //   setGoals((prevGoals) => {
+    //     return prevGoals.filter((goal, ind) => ind !== index);
+    //   });
+    // }
   }
 
   function modalToggle() {
@@ -56,7 +71,15 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Button title="Add a new goal" onPress={modalToggle} />
+
       <Modal visible={modalVisible} animationType="slide">
+        {/* <View style={styles.imageContainer}>
+          <Image
+            source={require("./assets/goal.jpeg")}
+            style={styles.goalImg}
+          />
+        </View> */}
+
         <View style={styles.GoalView}>
           <TextInput
             placeholder="Enter Goal now"
@@ -67,7 +90,7 @@ export default function App() {
 
           <View style={styles.buttonViews}>
             <View style={styles.Button}>
-              <Button title="Cancel" />
+              <Button title="Cancel" onPress={modalToggle} />
             </View>
             <View style={styles.Button}>
               <Button title="Add Goal" onPress={buttonClickHandler} />
@@ -75,6 +98,7 @@ export default function App() {
           </View>
         </View>
       </Modal>
+
       <View style={styles.listGoals}>
         {/* <ScrollView>
           {goals.map((goal, index) => (
@@ -110,22 +134,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   GoalView: {
-    flex: 1,
+    flex: 5,
     // flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     borderBottomWidth: 1,
+    // backgroundColor: "#fff7db",
     // marginBottom: 24,
   },
   buttonViews: {
     marginVertical: 20,
     flexDirection: "row",
   },
-  Button:{
-    marginHorizontal:10,
-    width:"30%"
-
-
+  Button: {
+    marginHorizontal: 10,
+    width: "30%",
   },
   TextBox: {
     borderWidth: 2,
@@ -135,8 +158,24 @@ const styles = StyleSheet.create({
     padding: 10,
     marginRight: 10,
     fontSize: 20,
+    // color:'#fff'
   },
   listGoals: {
     flex: 7,
+  },
+  imageContainer:{
+    flex:1,
+    width:250,
+    margin:'auto',
+    justifyContent:'center',
+    alignItems:'flex-start',
+    borderWidth:2
+  },
+  goalImg: {
+    width: 250,
+    height: 250,
+    objectFit:'contain',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
