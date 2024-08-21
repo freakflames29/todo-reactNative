@@ -30,10 +30,17 @@ export default function App() {
 
   function buttonClickHandler() {
     console.log(enteredText);
-    setGoals((prevGoals) => [...prevGoals, enteredText]);
-    setEnteredText("");
-    modalToggle();
-    // Alert.alert("added");
+    if (enteredText.length > 0) {
+      console.log("Entered empty string");
+
+      setGoals((prevGoals) => [...prevGoals, enteredText]);
+      setEnteredText("");
+      modalToggle();
+    }
+    else{
+
+      Alert.alert("Please add something!");
+    }
   }
 
   function DeleteHandler(index) {
@@ -69,38 +76,44 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <Button title="Add a new goal" onPress={modalToggle} />
+    <>
+      <StatusBar style="dark" />
+      <View style={styles.container}>
+        <Button title="Add a new goal" onPress={modalToggle} />
 
-      <Modal visible={modalVisible} animationType="slide">
-        {/* <View style={styles.imageContainer}>
+        <Modal visible={modalVisible} animationType="slide">
+          {/* <View style={styles.imageContainer}>
           <Image
             source={require("./assets/goal.jpeg")}
             style={styles.goalImg}
           />
         </View> */}
 
-        <View style={styles.GoalView}>
-          <TextInput
-            placeholder="Enter Goal now"
-            style={styles.TextBox}
-            onChangeText={enteredTextHandler}
-            value={enteredText}
-          />
+          <View style={styles.GoalView}>
+            <TextInput
+              placeholder="Enter Goal now"
+              style={styles.TextBox}
+              onChangeText={enteredTextHandler}
+              value={enteredText}
+            />
 
-          <View style={styles.buttonViews}>
-            <View style={styles.Button}>
-              <Button title="Cancel" onPress={modalToggle} />
-            </View>
-            <View style={styles.Button}>
-              <Button title="Add Goal" onPress={buttonClickHandler} />
+            <View style={styles.buttonViews}>
+              <View style={styles.Button}>
+                <Button title="Cancel" onPress={modalToggle} color="#f45550" />
+              </View>
+              <View style={styles.Button}>
+                <Button
+                  title="Add Goal"
+                  onPress={buttonClickHandler}
+                  color="#6cd395"
+                />
+              </View>
             </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
 
-      <View style={styles.listGoals}>
-        {/* <ScrollView>
+        <View style={styles.listGoals}>
+          {/* <ScrollView>
           {goals.map((goal, index) => (
             <View key={index} style={styles.listItems}>
               <Text style={styles.listText}>{goal}</Text>
@@ -108,22 +121,23 @@ export default function App() {
           ))}
         </ScrollView> */}
 
-        {/* a good way to list cause it is dynamic kind of lazyLoad  */}
+          {/* a good way to list cause it is dynamic kind of lazyLoad  */}
 
-        <FlatList
-          data={goals}
-          renderItem={(itemData) => {
-            return (
-              <GoalItem
-                text={itemData.item}
-                keyValue={itemData.index}
-                onDeleteTap={DeleteHandler}
-              />
-            );
-          }}
-        />
+          <FlatList
+            data={goals}
+            renderItem={(itemData) => {
+              return (
+                <GoalItem
+                  text={itemData.item}
+                  keyValue={itemData.index}
+                  onDeleteTap={DeleteHandler}
+                />
+              );
+            }}
+          />
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 
@@ -163,18 +177,18 @@ const styles = StyleSheet.create({
   listGoals: {
     flex: 7,
   },
-  imageContainer:{
-    flex:1,
-    width:250,
-    margin:'auto',
-    justifyContent:'center',
-    alignItems:'flex-start',
-    borderWidth:2
+  imageContainer: {
+    flex: 1,
+    width: 250,
+    margin: "auto",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    borderWidth: 2,
   },
   goalImg: {
     width: 250,
     height: 250,
-    objectFit:'contain',
+    objectFit: "contain",
     justifyContent: "center",
     alignItems: "center",
   },
